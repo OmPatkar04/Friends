@@ -2,17 +2,17 @@ let highestZ = 1;
 
 class Paper {
   holdingPaper = false;
-  mouseTouchX = 0;
-  mouseTouchY = 0;
+  touchX = 0;
+  touchY = 0;
   mouseX = 0;
   mouseY = 0;
-  prevMouseX = 0;
-  prevMouseY = 0;
+  prevX = 0;
+  prevY = 0;
   velX = 0;
   velY = 0;
   rotation = Math.random() * 30 - 15;
-  currentPaperX = 0;
-  currentPaperY = 0;
+  currentX = 0;
+  currentY = 0;
   rotating = false;
 
   init(paper) {
@@ -23,14 +23,14 @@ class Paper {
           this.mouseX = touch.clientX;
           this.mouseY = touch.clientY;
         } else {
-          this.mouseX = e.clientX;
-          this.mouseY = e.clientY;
+          this.mouseX = e.pageX;
+          this.mouseY = e.pageY;
         }
-        this.velX = this.mouseX - this.prevMouseX;
-        this.velY = this.mouseY - this.prevMouseY;
+        this.velX = this.mouseX - this.prevX;
+        this.velY = this.mouseY - this.prevY;
       }
-      const dirX = this.mouseX - this.mouseTouchX;
-      const dirY = this.mouseY - this.mouseTouchY;
+      const dirX = this.mouseX - this.touchX;
+      const dirY = this.mouseY - this.touchY;
       const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
       const dirNormalizedX = dirX / dirLength;
       const dirNormalizedY = dirY / dirLength;
@@ -42,12 +42,12 @@ class Paper {
       }
       if (this.holdingPaper) {
         if (!this.rotating) {
-          this.currentPaperX += this.velX;
-          this.currentPaperY += this.velY;
+          this.currentX += this.velX;
+          this.currentY += this.velY;
         }
-        this.prevMouseX = this.mouseX;
-        this.prevMouseY = this.mouseY;
-        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+        this.prevX = this.mouseX;
+        this.prevY = this.mouseY;
+        paper.style.transform = `translateX(${this.currentX}px) translateY(${this.currentY}px) rotateZ(${this.rotation}deg)`;
       }
     };
 
@@ -58,15 +58,15 @@ class Paper {
       highestZ += 1;
       if (e.type === 'touchstart') {
         const touch = e.touches[0];
-        this.mouseTouchX = touch.clientX;
-        this.mouseTouchY = touch.clientY;
-        this.prevMouseX = this.mouseX;
-        this.prevMouseY = this.mouseY;
+        this.touchX = touch.clientX;
+        this.touchY = touch.clientY;
+        this.prevX = touch.clientX;
+        this.prevY = touch.clientY;
       } else {
-        this.mouseTouchX = this.mouseX;
-        this.mouseTouchY = this.mouseY;
-        this.prevMouseX = this.mouseX;
-        this.prevMouseY = this.mouseY;
+        this.touchX = e.pageX;
+        this.touchY = e.pageY;
+        this.prevX = e.pageX;
+        this.prevY = e.pageY;
       }
       if (e.button === 2) {
         this.rotating = true;
